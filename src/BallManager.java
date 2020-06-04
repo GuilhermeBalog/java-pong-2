@@ -1,7 +1,11 @@
 import java.awt.Color;
 import java.lang.reflect.*;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /**
 	Classe que gerencia uma ou mais bolas presentes em uma partida. Esta classe é a responsável por instanciar 
@@ -11,10 +15,23 @@ import java.util.List;
 */
 
 public class BallManager {
-	private long startBoostTime; 
+	/**
+		Atributo privado que representa a velocidade inicial da bola, definida no construtor
+	 */
+
 	private double initialSpeed;
 
-	private List<IBall> duplicatedBalls;
+	/**
+		Atributo privado que armazena o momento que começou o Boost
+	 */
+
+	private long startBoostTime; 
+
+	/**
+		Atributo privado que representa as eventuais bolas extras e seus respectivos momentos de começo de boost e de aparecimento 
+	 */
+
+	private Map<IBall, Long[]> extraBalls;
 
 	/**
 		Atributo privado que representa a bola principal do jogo.	
@@ -45,7 +62,7 @@ public class BallManager {
 			ballClass = Ball.class;
 		}
 
-		duplicatedBalls = new LinkedList<>();
+		extraBalls = new HashMap<>();
 	}
 
 	/**
@@ -124,7 +141,7 @@ public class BallManager {
 
 		theBall.draw();
 
-		for(IBall ball: duplicatedBalls){
+		for(IBall ball: extraBalls.keySet()){
 			ball.draw();
 		}
 	}
@@ -138,14 +155,30 @@ public class BallManager {
 	public void update(long delta){
 		
 		theBall.update(delta);
-		for(IBall ball: duplicatedBalls){
+		
+		for(IBall ball: extraBalls.keySet()){
 			ball.update(delta);
 		}
 
-		long endBoostTime = System.currentTimeMillis();
+		long currentTime = System.currentTimeMillis();
 
-		if(endBoostTime - startBoostTime >= BoostTarget.BOOST_DURATION){
+		if(currentTime - startBoostTime >= BoostTarget.BOOST_DURATION){
 			theBall.setSpeed(initialSpeed);
+		}
+
+		for(Iterator<IBall> it = extraBalls.keySet().iterator(); it.hasNext(); ){
+			IBall currentBall = it.next();
+
+			Long currentBoostDuration = currentTime - extraBalls.get(currentBall)[0];
+			Long currentDuplicationDuration = currentTime - extraBalls.get(currentBall)[1];
+
+			if(currentBoostDuration >= BoostTarget.BOOST_DURATION){
+				currentBall.setSpeed(initialSpeed);
+			}
+			
+			if(currentDuplicationDuration >= DuplicatorTarget.EXTRA_BALL_DURATION){
+				it.remove();
+			}
 		}
 
 	}
@@ -164,7 +197,7 @@ public class BallManager {
 
 		if(theBall.checkCollision(wall)) hits++;
 		
-		for(IBall ball: duplicatedBalls){
+		for(IBall ball: extraBalls.keySet()){
 			if(ball.checkCollision(wall)) hits++;
 		}
 
@@ -181,7 +214,7 @@ public class BallManager {
 
 		theBall.checkCollision(player);
 
-		for(IBall ball: duplicatedBalls){
+		for(IBall ball: extraBalls.keySet()){
 			ball.checkCollision(player);
 		}
 	}
@@ -193,39 +226,60 @@ public class BallManager {
 	*/
 
 	public void checkCollision(Target target){
+		Map<IBall, Long[]> ballsToAdd = new HashMap<>();
 		
 		if(theBall.checkCollision(target)){
 			if(target instanceof BoostTarget){
 				boostBall(theBall);
 
 			} else if(target instanceof DuplicatorTarget){
-				duplicateBall(theBall);
+				duplicateBall(theBall, ballsToAdd);
 			}
 		}
 
-		for(IBall ball: duplicatedBalls){
+		for(IBall ball: extraBalls.keySet()){
 			if(ball.checkCollision(target)){
+				
 				if(target instanceof BoostTarget){
 					boostBall(ball);
 	
 				} else if(target instanceof DuplicatorTarget){
-					duplicateBall(ball);
+					duplicateBall(ball, ballsToAdd);
 				}
 			}
 		}
+
+		extraBalls.putAll(ballsToAdd);
 	}
 
 	private void boostBall(IBall ball){
-
 		double boostedSpeed = initialSpeed * BoostTarget.BOOST_FACTOR;
-		theBall.setSpeed(boostedSpeed);
+		ball.setSpeed(boostedSpeed);
 
-		startBoostTime = System.currentTimeMillis();
+		if(ball.equals(theBall)){
+			startBoostTime = System.currentTimeMillis();
+		} else {
+			Long[] times = { System.currentTimeMillis(), extraBalls.get(ball)[1] };
+			extraBalls.put(ball, times);
+		}
 	}
 
-	private void duplicateBall(IBall ball){
-		IBall newBall = createBallInstance(ball.getCx(), ball.getCy(), ball.getWidth(), ball.getHeight(), Color.RED, initialSpeed, ball.getVx(), ball.getVy());
-		duplicatedBalls.add(newBall);
+	private void duplicateBall(IBall ball, Map<IBall, Long[]> ballsToAdd){
+		Random rdm = new Random();
+		
+		IBall newBall = createBallInstance(
+			ball.getCx(), 
+			ball.getCy(), 
+			theBall.getWidth() * 0.9, 
+			theBall.getHeight() * 0.9, 
+			Color.RED, 
+			initialSpeed, 
+			ball.getVx() + rdm.nextDouble(), 
+			ball.getVy() + rdm.nextDouble());
+
+		Long[] times = { (long) 0, System.currentTimeMillis() };
+
+		ballsToAdd.put(newBall, times);
 	}
 }
 
