@@ -1,4 +1,4 @@
-# Java Pong 2.0
+# Pong 2.0
 
 ## Descrição
 
