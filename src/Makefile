@@ -1,7 +1,7 @@
 default: run
 
 run: compile
-	java Pong Ball 10 true
+	java Pong FxBall 10 true
 	
 compile:
 	javac *.java
