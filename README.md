@@ -1,5 +1,32 @@
 # Pong 2.0
 
+Aprimoramento da primeira versão de Pong, desenvolvido como exercício de programação
+
+![Pong! 2.0](./pong.gif)
+
+## Instruções para compilar e rodar
+
+Clone o repositório e entre na pasta criada:
+
+```bash
+git clone https://github.com/GuilhermeBalog/java-pong-2
+cd java-pong-2/
+```
+
+Se você possui a ferramenta GNU Make, basta executar:
+
+```bash
+cd src/
+make
+```
+
+Isso faz o jogo rodar com a bola **FxBall**. Há também outras opções de bolas. Estas são todas as opções:
+
+- **FxBall:** Uma bola com um rastro, executada por: `make fx`, ou simplesmente `make`;
+- **DiamondBall:** Uma bola em formato de diamante, executada por: `make diamond`;
+- **Ball:** A bola comum, da primeira versão de *Pong!* e é executada por: `make regular`;
+- **ShadowBall:** Uma bola com uma sombra, que confunde os jogadores, executada por: `make shadow`;
+
 ## Descrição
 
 Após o sucesso de [Pong!](https://github.com/GuilhermeBalog/java-pong), lançado pela *EACH Game Dev. Co.* e finalizado graças a sua
@@ -7,9 +34,10 @@ ajuda, cabe a você a tarefa de implementar alguns recursos novos a serem incorp
 nova versão do jogo (**Pong! 2.0**). Mais especificamente, sua tarefa consiste em
 **implementar uma nova classe** e **completar uma classe já existente**.
 
+Documentação: [clique aqui](https://guilhermebalog.github.io/java-pong-2/) para acessar
+
 A nova classe que deve ser implementada é a **FxBall**. Seu papel é fornecer uma nova
-implementação de bola que acrescenta um efeito visual de *rastro* (veja o vídeo atualizado
-do *gameplay* para entender melhor do que se trata). A nova classe deve, obrigatoriamente,
+implementação de bola que acrescenta um efeito visual de *rastro*. A nova classe deve, obrigatoriamente,
 implementar a interface **IBall**. Além disso, você deve reaproveitar a implementação já
 existente na classe **Ball**, seja através de herança, ou seja através de composição. Ao
 reaproveitar o que já existe na classe **Ball**, evita-se a reimplementação dos
@@ -77,3 +105,7 @@ Adicionalmente, também é fornecido o código fonte da classe **Pong**, para qu
 possam ter uma visão geral de como o jogo é implementado, mas alterações não devem ser
 feitas nesta classe pois, na correção, nossa própria versão da classe será usada. Desta
 forma qualquer alteração feita por você na classe **Pong** não será considerada.
+
+## Autor
+
+Esse é um exercício programa proposto pelos professores [Daniel Cordeiro](http://www.each.usp.br/dc/) e [Flávio Luiz Coutinho](http://lattes.cnpq.br/3100288618568772) na matéria de Computação Orientada a Objetos, implementado por [Guilherme Balog Gardino](https://guilhermebalog.github.io/)

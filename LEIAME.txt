@@ -1,0 +1,30 @@
+EP2 - Pong 2.0!
+Nome: Guilherme Balog Gardino
+Nro USP: 11270649
+
+INSTRUÇÕES INSTALAÇÃO
+
+Requisitos:
+- JDK 11 ou superior
+- GNU Make (opicional)
+
+Rodando com o GNU Make:
+
+Se o GNU Make está instalado, basta entrar na pasta src pela linha de comando e executar o comando 'make':
+
+cd src/
+make
+
+O GNU Make vai compilar os arquivos .java e rodar a classe principal Pong, utilizando a bola FxBall.
+Caso queira apenas compilar o programa, ainda na pasta src basta executar o comando 'make compile'
+
+As 4 bolas disposníveis:
+
+- FxBall: Uma bola com um rastro, executada por: 'make fx', ou simplesmente 'make';
+- DiamondBall: Uma bola em formato de diamante, executada por: 'make diamond';
+- Ball: A bola comum, da primeira versão de *Pong!* e é executada por: 'make regular';
+- ShadowBall: Uma bola com uma sombra, que confunde os jogadores, executada por: 'make shadow';
+
+O Código também estará disponível publicamente no
+GitHub em https://github.com/GuilhermeBalog/java-pong-2
+após a data de entrega do EP

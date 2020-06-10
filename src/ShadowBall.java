@@ -1,8 +1,8 @@
 import java.awt.*;
 
-public class ShaddowBall extends Ball {
+public class ShadowBall extends Ball {
 
-    public ShaddowBall(double cx, double cy, double width, double height, Color color, double speed, double vx, double vy){
+    public ShadowBall(double cx, double cy, double width, double height, Color color, double speed, double vx, double vy){
 
 		super(cx, cy, width, height, color, speed, vx, vy);
     }

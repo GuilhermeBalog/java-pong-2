@@ -7,7 +7,7 @@ public class FxBall extends Ball {
     private static int FADE_FACTOR;
     private static double DECREMENT_FACTOR;
 
-    private Deque<double[]> posicoesAntigas;
+    private Deque<double[]> rastro;
 
     public FxBall(double cx, double cy, double width, double height, Color color, double speed, double vx, double vy){
 
@@ -17,7 +17,7 @@ public class FxBall extends Ball {
         FADE_FACTOR = 5;
         DECREMENT_FACTOR = 0.9;
 
-        posicoesAntigas = new LinkedList<>();
+        rastro = new LinkedList<>();
     }
     
     public void draw(){
@@ -26,7 +26,8 @@ public class FxBall extends Ball {
         Color fxColor = getColor().darker();
         int count = 0;
 
-        for(double[] coord : posicoesAntigas){
+        // Rastro
+        for(double[] coord : rastro){
             GameLib.setColor(fxColor);
             GameLib.fillRect(coord[0], coord[1], getWidth() * fator, getHeight() * fator);
 
@@ -37,17 +38,19 @@ public class FxBall extends Ball {
             count++;
         }
         
+        // Bola principal
         GameLib.setColor(getColor());
         GameLib.fillRect(getCx(), getCy(), getWidth(), getHeight());
         
     }
 
     public void update(long delta){
-        double[] coord = { getCx(), getCy() };
-        posicoesAntigas.addFirst(coord);
 
-        if(posicoesAntigas.size() > FX_LENGTH){
-            posicoesAntigas.removeLast();
+        double[] coord = { getCx(), getCy() };
+        rastro.addFirst(coord);
+
+        if(rastro.size() > FX_LENGTH){
+            rastro.removeLast();
         }
 
         super.update(delta);
